@@ -1,5 +1,5 @@
 @echo off
-if "%1"="" goto error
+if "%1"=="" goto error
 type listing\%1.lst
 goto end
 :error
