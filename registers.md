@@ -20,3 +20,4 @@ for example, one can use the upper 8-bits of AX by specifying AH (A High),
 or the lower 8-bits by specifying AL (A Low).  
 So if 0x55AA where to be stored in AX, then AH would contain 0x55,  
 and AL would contain 0xAA.  
+
