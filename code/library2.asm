@@ -1,22 +1,3 @@
-  ; guess.asm
-  ; Guess a number between 0 and 7.
-  org 0x0100
-
-  in al, (0x40)   ; Read the timer counter chip
-  and al, 0x07    ; Mask bits so the value becomes 0-7
-  add al, 0x30    ; Convert into ASCII digit
-  mov cl, al      ; Save AL into CL
-game_loop:
-  mov al, '?'              ; AL now is question-mark sign
-  call display_letter       ; Display
-  call read_keyboard        ; Read keyboard
-  cmp al, cl                ; AL equals CL?
-  jne game_loop             ; No, jumps (if not equal)
-  call display_letter       ; Display number
-  mov al, 0x01              ; Display happy face
-  call display_letter
-  mov al, 0x03
-  call display_letter
   int 0x20        ; Exit to command-line.
 
 ; Display letter contained in AL (ASCII code)
@@ -53,3 +34,20 @@ read_keyboard:
   pop cx
   pop bx
   ret             ; Returns to caller
+
+  ;
+  ; Display the value of AX as a decimal number
+  ;
+display_number:
+  mov dx, 0           ; Makes DX = 0
+  mov cx, 10          ; Makes CX = 10
+  div cx              ; AX = DX:AX / CX
+  push dx
+  cmp ax, 0           ; If AX is zero...
+  je display_number_1 ; ...jump
+  call display_number ; else calls itself
+display_number_1:
+  pop ax              
+  add al, '0'         ; Convert remainder to ASCII digit
+  call display_letter ; Display on screen.
+  ret
